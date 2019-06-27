@@ -8,15 +8,14 @@ require 'json'
 require 'discordrb/websocket'
 
 begin
-  RBNACL_AVAILABLE = if ENV['DISCORDRB_NONACL']
-                       false
-                     else
-                       require 'rbnacl'
-                       true
-                     end
+  require 'rbnacl'
+  RBNACL_AVAILABLE = true
 rescue LoadError
-  puts "libsodium not available! You can continue to use discordrb as normal but voice support won't work.
+  if defined?(RbNaCl)
+    puts "libsodium not available! You can continue to use discordrb as normal but voice support won't work.
         Read https://github.com/meew0/discordrb/wiki/Installing-libsodium for more details."
+    raise
+  end
   RBNACL_AVAILABLE = false
 end
 
